@@ -1,25 +1,49 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
 
+<title>TeamTrack</title>
 
-<form method="post" action="">
 
-  {% csrf_token %}
-  <div class="form-group mb-2">
-    <label for="username">Username</label>
-    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
-    
+
+  <div class="loginregister-form-container">
+    <div class="heading-content">
+      <div class="heading-style">
+        <p>Login</p>
+      </div>
+    </div>
+    <div class="LR-form">
+      <form id="loginForm" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+          <input type="text" placeholder="Username" id="username" name="username">
+          <div id="usernameError" class="error-message"></div> <!-- Error message for username -->
+        </div>
+
+        <div class="div-space-top"></div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" id="password" name="password" required>
+          <div id="passwordError" class="error-message"></div> <!-- Error message for password -->
+        </div>
+
+        <div class="div-space-top"></div>
+        <input type="submit" placeholder="" id="submitButton" value="Login">
+        <p class="error-message error-report"></p>
+      </form>
+
+      <div class="div-space-top"></div>
+      <div class="div-space-top"></div>
+      <div class="div-space-top"></div>
+      <div class="div-space-top"></div>
+      <div class="donthave_acc">
+        <p>Don't have an account? <a href="#">Sign Up</a></p>
+      </div>
+    </div>
   </div>
-  <div class="form-group mb-2">
-    <label for="password">Password</label>
-    <input type="password" class="form-control" id="password" placeholder="Password" name ="password">
-  </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
 
+</div>
 {% endblock %}

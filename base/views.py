@@ -3,10 +3,13 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
+from .models import Projects
+from .utils import *
+
 # Create your views here.
 def index(request):
-    return HttpResponse("<h1> Hello world! </h1>")
-
+    content = {"greeting": greeting, "today_date": today_date}
+    return render(request, "home.html", content)
 
 def login_user(request):
     print(request)
@@ -58,5 +61,7 @@ def register_user(request):
 
     return render(request, "registration/register.html", {"form": form})
 
+def project_view(request, project_id):
+    project = Projects.objects.filter(project_id=project_id)
 
-
+    return render(request, "project.html", {"project": project})
