@@ -18,3 +18,8 @@ def list_of_projects(username):
 
     return user_projects
 
+@register.simple_tag
+def get_initials_of_fullname(input_string):
+    words = input_string.split()
+    first_letters = ''.join(word[0] for word in words[:2]).upper()
+    return first_letters

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+
+<div class="main-content">
+    <div class="project-container">
+        <div class="left-container">
+            <div class="heading-content">
+                <div class="heading-style">
+                    <p>Create a New Project</p>
+                </div>
+            </div>
+            <div class="project_create_form">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <input type="text" class="input-style" name="project_name" id="projectname"
+                            placeholder="Name your Project">
+                        <br>
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+
+                    <div class="div-space-top"></div>
+                    <div class="form-group">
+                        <div class="textarea-style textarea-wrapper">
+                            <textarea name="description" maxlength="255" id="projectdesc" rows="4"
+                                placeholder="Describe here"></textarea>
+                            <span id="charCount">0 / 255 characters used</span>
+                        </div>
+                        <span class="error-message" id="descError"></span>
+                    </div>
+
+                    <div class="div-space-top"></div>
+                    <div class="form-group">
+                        <input class="input-style" type="text" id="createprojectStartDate" name="start_date"
+                            onfocus="this.type='date'" onblur="if(!this.value) { this.type='text'; }"
+                            placeholder="Start Date">
+                        <br>
+                        <span class="error-message" id="startDateError"></span>
+                    </div>
+
+                    <div class="div-space-top"></div>
+                    <div class="form-group">
+                        <input class="input-style" type="text" id="createprojectEndDate" name="end_date"
+                            onfocus="(this.type='date')" onblur="if(!this.value)this.type='text';"
+                            placeholder="End Date">
+                        <br>
+                        <span class="error-message" id="endDateError"></span>
+                    </div>
+
+                    <div class="div-space-top"></div>
+                    <div class="form-group">
+                        <select class="input-style" name="priority" id="createpriority">
+                            <option value="0" selected hidden>Select priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <br>
+                        <span class="error-message" id="priorityError"></span>
+                    </div>
+
+                    <div class="div-space-top"></div>
+                    <div class="form-group">
+                        <input type="submit" class="button-style" value="Submit">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="right-container">
+            <div class="heading-content">
+                <div class="heading-style">
+                    <p>List of Created Project</p>
+                </div>
+            </div>
+
+            <div class="project-section">
+                <div class="user-project">
+                    <div class="project" id="created_projects">
+                        <!-- display list of created project dynamically -->
+                    </div>
+
+                    <div class="editproject-popup popup-style" id="editproject-popup">
+                        <div class="editproject-popup-content">
+                            <div class="heading-content">
+                                <span class="editproject-popup-close" onclick="editproject_popup_toggle()">&times;
+                                </span>
+                                <p class="heading-style">Edit Project</p>
+                            </div>
+                            <div class="bottom-line"></div>
+                            <div class="div-space-top"></div>
+                            <form id="editProjectForm" enctype="multipart/form-data">
+                                <input type="hidden" name="project_id" id="project_id"
+                                    value="<?php echo $project_id; ?>">
+                                <div class="form-group">
+                                    <input class="input-style" type="text" name="project_name" id="project_name">
+                                    <span id="projectname-error" class="error-message"></span>
+                                </div>
+                                <div class="form-group textarea-style textarea-wrapper">
+                                    <textarea id="description" name="description" maxlength="255" rows="4"></textarea>
+                                    <span id="charCount">0 / 255 characters used</span>
+                                    <span id="projectdescription-error" class="error-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input class="input-style" type="text" id="projectStartDate" name="start_date"
+                                        onfocus="this.type='date'" onblur="if(!this.value) { this.type='text'; }"
+                                        placeholder="Start Date">
+                                    <span id="projectStartDate-error" class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input class="input-style" type="text" id="projectEndDate" name="end_date"
+                                        onfocus="(this.type='date')" onblur="if(!this.value)this.type='text';"
+                                        placeholder="End Date">
+                                    <span id="projectEndDate-error" class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <?php include 'partial/project_partial/selectproject_priority.php';
+                                        projectPrioritySelect($project_id);
+                                        ?>
+                                    <span id="projectPriority-error" class="error-message"></span>
+                                </div>
+
+                                <button type="submit" id="submitEditProject" class="button-style">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="deleteproject-popup popup-style" id="deleteproject-popup">
+                        <div class="deleteproject-popup-content">
+                            <div class="heading-content">
+                                <span class="deleteproject-popup-close" onclick="deleteproject_popup_toggle()">&times;
+                                </span>
+                                <p class="heading-style">Delete Project</p>
+                            </div>
+                            <div class="bottom-line"></div>
+                            <div class="div-space-top"></div>
+
+                            <p style="color: var(--danger-color); font-weight: 900;">Are you sure to
+                                delete project name?</p>
+                            <button class="button-style" id="confirmDeleteProject">Yes</button>
+                            <button class="button-style" id="cancelDeleteProject">Cancel</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

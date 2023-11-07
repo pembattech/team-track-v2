@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="heading-content">
+        <div class="heading-style">
+            <p>Home</p>
+        </div>
+    </div>
+    <div class="daydate-greet-container">
+        <div id="date">{{today_date}}</div>
+        <div id="greeting"> {{greeting}}</div>
+    </div>
+</div>
+{% endblock %}

@@ -65,3 +65,7 @@ def project_view(request, project_id):
     project = Projects.objects.filter(project_id=project_id)
 
     return render(request, "project.html", {"project": project})
+
+def create_project(request):
+    
+    return render(request, "create_project.html")
