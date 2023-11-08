@@ -5,12 +5,6 @@ from ..models import Projects
 
 register = template.Library()
 
-
-@register.simple_tag
-def hello():
-    return "hello world"
-
-
 @register.simple_tag
 def list_of_projects(username):
     desired_user = User.objects.get(username=username)

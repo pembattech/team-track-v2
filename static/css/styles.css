@@ -1590,9 +1590,8 @@ input.d-none {
     border: 1px solid var(--color-border);
     border-radius: 5px;
     width: 100%;
-    padding: 20px;
+    /* padding: 20px; */
     height: 40px;
-    -moz-outline-style: none;
 }
 
 .LR-form input[type="text"]:focus,

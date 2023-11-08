@@ -27,7 +27,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
 
-                return HttpResponse("Login successful.")
+                return redirect("home")
             else:
                 return HttpResponse("Invalid credentials.")
         except Exception as e:
@@ -41,7 +41,8 @@ def logout_user(request):
     if request.user.is_authenticated:
         username = request.user.username
         logout(request)
-        return HttpResponse(f"Logout successful. User '{username}' has been logged out.")
+        print(f"Logout successful. User '{username}' has been logged out.")
+        return redirect("login")
     else:
         return HttpResponse("No user is currently logged in.")
 
@@ -51,7 +52,7 @@ def register_user(request):
         print(form)
         if form.is_valid():
             username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
+            password = form.cleaned_data['password']
             form.save()
 
             return redirect('login')
@@ -62,10 +63,18 @@ def register_user(request):
     return render(request, "registration/register.html", {"form": form})
 
 def project_view(request, project_id):
-    project = Projects.objects.filter(project_id=project_id)
+    project_queryset = Projects.objects.filter(project_id=project_id)[0]
 
-    return render(request, "project.html", {"project": project})
+    # Retrieve and print all fields
+    fields = project_queryset._meta.fields
+
+    for field in fields:
+            print(f"{field.name}: {getattr(project_queryset, field.name)}")
+    
+    content = {"project_queryset": project_queryset, "project_title": capitalized_string(project_queryset.project_name)}
+    
+    return render(request, "project.html", content)
 
 def create_project(request):
-    
+
     return render(request, "create_project.html")

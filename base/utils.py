@@ -19,8 +19,6 @@ def greeting():
 
     return result
 
-def get_first_letters_max_two_words(input_string):
-    words = input_string.split()
-    first_letters = ''.join(word[0] for word in words[:2]).upper()
-    return first_letters
-
+def capitalized_string(input_string):
+    capitalized_string = ' '.join(word.capitalize() for word in input_string.split())
+    return capitalized_string
