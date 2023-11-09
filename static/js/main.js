@@ -168,22 +168,6 @@ function hidePopup() {
     popup.style.display = "none";
 }
 
-// Function for logout action
-function logout() {
-    // Add your logout code here
-    // For example, redirecting the user to the logout page
-    window.location.href = "logout.php";
-    hidePopup();
-}
-
-// Function for profile edit action
-function editProfile() {
-    // Add your profile edit code here
-    // For example, redirecting the user to the profile edit page
-    window.location.href = "profile.php";
-    hidePopup();
-}
-
 // Event listener to show/hide the popup menu when the button is clicked
 document.getElementById("popup-btn").addEventListener("click", function () {
     var popup = document.getElementById("myPopup");

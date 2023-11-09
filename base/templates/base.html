@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -140,8 +139,18 @@
 
     <div class="navbar-right">
         {% if user.is_authenticated %}
-        <p>{% get_initials_of_fullname request.user.username %}</p>
+        <button class="profpic" id="popup-btn" style="color: black;">{% get_initials_of_fullname request.user.username %}</button>
         {% endif %}
+    </div>
+
+    <!-- The popup menu -->
+    <div class="popup-menu popup-style" id="myPopup">
+        <a href="#">
+            <p>Profile</p>
+        </a>
+        <a href="{% url 'logout' %}" class="indicate-danger">
+            <p>Logout</p>
+        </a>
     </div>
 
 
@@ -154,20 +163,18 @@
                     Home
                 </a>
             </li>
-            {% comment %}
-            <!-- <li class="related-btn-img">
-                <a href="{% url 'mytasks' %}" class="full-width">
+            <li class="related-btn-img">
+                <a href="#" class="full-width">
                     <img src="{% static 'image/check-square.svg' %}">
                     My Task
                 </a>
             </li>
             <li class="related-btn-img">
-                <a href="{% url 'inbox' %}" class="full-width">
+                <a href="#" class="full-width">
                     <img src="{% static 'image/bell.svg' %}" alt="">
                     Inbox
                 </a>
-            </li> -->
-            {% endcomment %}
+            </li>
             <li>
                 <div class="collapsible-project">Project ▼</div>
                 <div class="collapsible-content">
@@ -194,10 +201,29 @@
     <div class="container">
         {% block content %}
         {% endblock %}
-
     </div>
 
-    <script src="{% static 'js/main.js'}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Event listener to show/hide the popup menu when the button is clicked
+        document.getElementById("popup-btn").addEventListener("click", function () {
+            var popup = document.getElementById("myPopup");
+            if (popup.style.display === "block") {
+                hidePopup();
+            } else {
+                showPopup();
+            }
+        });
+
+        // Event listener to hide the popup menu when clicking outside of it
+        window.addEventListener("click", function (event) {
+            var popup = document.getElementById("myPopup");
+            if (event.target !== popup && event.target !== document.getElementById("popup-btn")) {
+                hidePopup();
+            }
+        });
+
+    </script>
 </body>
 
 </html>

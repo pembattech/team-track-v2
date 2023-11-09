@@ -2,14 +2,19 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
-from .models import Projects
+from .models import Projects, ProjectUsers, Tasks
 from .utils import *
+from .form import CreateProjectForm
+
 
 # Create your views here.
+@login_required
 def index(request):
     content = {"greeting": greeting, "today_date": today_date}
     return render(request, "home.html", content)
+
 
 def login_user(request):
     print(request)
@@ -46,35 +51,72 @@ def logout_user(request):
     else:
         return HttpResponse("No user is currently logged in.")
 
+
 def register_user(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         print(form)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
             form.save()
 
-            return redirect('login')
-            
+            return redirect("login")
+
     else:
         form = UserCreationForm()
 
     return render(request, "registration/register.html", {"form": form})
 
+
 def project_view(request, project_id):
     project_queryset = Projects.objects.filter(project_id=project_id)[0]
+    task_instances = Tasks.objects.filter(project_id=project_id)
+    memberlist_instances = ProjectUsers.objects.filter(project_id=project_id)
+
+    for member in memberlist_instances:
+        user = member.user_id.username
+        is_owner = member.is_project_owner
+        print(user)
+        print(is_owner)
 
     # Retrieve and print all fields
     fields = project_queryset._meta.fields
 
     for field in fields:
-            print(f"{field.name}: {getattr(project_queryset, field.name)}")
-    
-    content = {"project_queryset": project_queryset, "project_title": capitalized_string(project_queryset.project_name)}
-    
-    return render(request, "project.html", content)
+        print(f"{field.name}: {getattr(project_queryset, field.name)}")
 
+    context = {
+        "project_id": project_id,
+        "project_queryset": project_queryset,
+        "project_title": capitalized_string(project_queryset.project_name),
+        "task_instances": task_instances,
+        "memberlist_instances": memberlist_instances,
+    }
+
+    return render(request, "project.html", context)
+
+
+@login_required
 def create_project(request):
+    if request.method == "POST":
+        form = CreateProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(
+                commit=False
+            )  # Prevent saving the form before modifying it
+            project.save()  # Save the project first to get the project ID
 
-    return render(request, "create_project.html")
+            # Now, create the relationship between the project and the current user
+            project_user = ProjectUsers.objects.create(
+                user_id=request.user,
+                project_id=project,
+                is_project_owner=True,
+                user_role="Project Owner",
+            )
+            
+            return redirect("home")
+    else:
+        form = CreateProjectForm()
+
+    return render(request, "create_project.html", {"form": form})
