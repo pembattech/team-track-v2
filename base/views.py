@@ -3,10 +3,15 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
+
+from django.contrib.auth.models import User
+
 
 from .models import Projects, ProjectUsers, Tasks
 from .utils import *
-from .form import CreateProjectForm
+from .form import ProfilePictureForm, CreateProjectForm
 
 
 # Create your views here.
@@ -68,6 +73,23 @@ def register_user(request):
 
     return render(request, "registration/register.html", {"form": form})
 
+@login_required
+def user_profile(request, username):
+    return render(request, "profile.html")
+
+@login_required
+def upload_profile_picture(request):
+    if request.method == "POST":
+        form = ProfilePictureForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            # Redirect or render success page
+    else:
+        form = ProfilePictureForm()
+    return render(request, "upload_profile_picture.html", {"form": form})
+
 
 def project_view(request, project_id):
     project_queryset = Projects.objects.filter(project_id=project_id)[0]
@@ -99,6 +121,9 @@ def project_view(request, project_id):
 
 @login_required
 def create_project(request):
+    user_projects = Projects.objects.filter(Q(projectusers__user_id__username=request.user.username) & Q(projectusers__is_project_owner = True))
+    print(user_projects)
+
     if request.method == "POST":
         form = CreateProjectForm(request.POST)
         if form.is_valid():
@@ -114,9 +139,8 @@ def create_project(request):
                 is_project_owner=True,
                 user_role="Project Owner",
             )
-            
-            return redirect("home")
+
     else:
         form = CreateProjectForm()
 
-    return render(request, "create_project.html", {"form": form})
+    return render(request, "create_project.html", {"form": form, 'created_project_lst': user_projects})

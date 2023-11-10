@@ -1,6 +1,10 @@
 from django import forms
-from .models import Projects
+from .models import Projects, UserProfile
 
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture']
 
 class CreateProjectForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+
+<div class="main-content">
+    <div class="userinfo-profilepic">
+        <div class="profile-picture">
+            {% if user.userprofile.profile_picture %}
+            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+            <p>No profile picture available</p>
+            {% endif %}
+        </div>
+
+        <div class="user-personal-info">
+            <div class="user-name">
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+
+            <div class="user-email">
+                <p>{{ user.email }}</p>
+
+                <button class="edit-profile-btn" onclick="editprofile_popup_toggle()">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

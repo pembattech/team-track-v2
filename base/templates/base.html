@@ -139,15 +139,21 @@
 
     <div class="navbar-right">
         {% if user.is_authenticated %}
+        {% if user.userprofile.profile_picture %}
+        <img id="popup-btn" src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+        {% else %}
         <button class="profpic" id="popup-btn" style="color: black;">{% get_initials_of_fullname request.user.username %}</button>
+        {% endif %}
         {% endif %}
     </div>
 
     <!-- The popup menu -->
     <div class="popup-menu popup-style" id="myPopup">
-        <a href="#">
+        {% if user.is_authenticated %}
+        <a href="{% url 'user_profile' user.username %}">
             <p>Profile</p>
         </a>
+        {% endif %}
         <a href="{% url 'logout' %}" class="indicate-danger">
             <p>Logout</p>
         </a>
